@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <style>
+        .navbar-text#logoutBtn {
+            --bs-btn-hover-color: #e3e2e2;
+            --bs-btn-active-border-color: #343a40;
+            --bs-btn-active-color: #e3e2e2;
+        }
+
+        body {
+            background-color: #f8faf9;
+        }
+    </style>
+</head>
+<body>
+<!--Навигационная панель-->
+<nav class="navbar navbar-dark" style="background-color: #343a40">
+    <div class="container-fluid">
+        <span class="navbar-brand">
+            <b th:text="${user.getUsername()}">Username</b>
+            with rolesSet:
+            <span th:each="roleName : ${user.getAuthorities()}">
+                <span th:text="${#strings.substring(roleName.authority, 5)}"></span>
+            </span>
+        </span>
+        <a th:href="@{/logout}" class="navbar-text btn" id="logoutBtn">Logout</a>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <!--Боковая панель ролей-->
+        <div class="col-2 bg-white" style="height: 100vh">
+            <div class="nav flex-column nav-pills mt-3">
+                <button class="nav-link text-start active" data-bs-toggle="tab" data-bs-target="#userPanel">User
+                </button>
+            </div>
+        </div>
+        <div class="col-10">
+            <div class="tab-content">
+                <!--Панель юзера-->
+                <div class="tab-pane active mx-3" id="userPanel">
+                    <h2 class="my-3">User information page</h2>
+                    <div class="card">
+                        <div class="card-header"><h5 class="my-1">About user</h5></div>
+                        <div class="card-body">
+                            <hr class="my-1">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="row">ID</th>
+                                    <th scope="row">Username</th>
+                                    <th scope="row">Role</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td th:text="${user.id}" class="align-middle">ID</td>
+                                    <td th:text="${user.username}" class="align-middle">Email</td>
+                                    <td class="align-middle">
+                                        <div th:each="roleName : ${user.rolesSet}">
+                                            <span th:text="${#strings.substring(roleName.getRoleName(), 5)}"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+</body>
+</html>
