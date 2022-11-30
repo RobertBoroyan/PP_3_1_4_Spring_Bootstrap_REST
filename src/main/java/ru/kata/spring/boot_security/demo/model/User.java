@@ -19,6 +19,12 @@ public class User implements UserDetails {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "age")
+    private int age;
+
     @Column(name = "password")
     private String password;
 
@@ -32,9 +38,11 @@ public class User implements UserDetails {
     }
 
     public User(String username,
-                String password, Set<Role> roles) {
+                String name, int age, String password, Set<Role> roles) {
 
         this.username = username;
+        this.name = name;
+        this.age = age;
         this.password = password;
         this.rolesSet = roles;
         roles.forEach(role -> role.setUsersSet(Collections.singleton(this)));
@@ -60,10 +68,6 @@ public class User implements UserDetails {
         this.rolesSet = rolesSet;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return rolesSet;
-    }
 
     @Override
     public String getPassword() {
@@ -77,6 +81,27 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return rolesSet;
     }
 
     @Override
@@ -105,12 +130,12 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(rolesSet, user.rolesSet);
+        return id == user.id && age == user.age && Objects.equals(username, user.username) && Objects.equals(name, user.name) && Objects.equals(password, user.password) && Objects.equals(rolesSet, user.rolesSet);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password);
+        return Objects.hash(id, username, name, age, password, rolesSet);
     }
 
     @Override
@@ -118,7 +143,10 @@ public class User implements UserDetails {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", age=" + age +
                 ", password='" + password + '\'' +
+                ", rolesSet=" + rolesSet +
                 '}';
     }
 }

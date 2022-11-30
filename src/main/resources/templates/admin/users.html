@@ -71,6 +71,8 @@
                                         <tr>
                                             <th scope="row">ID</th>
                                             <th scope="row">Username</th>
+                                            <th scope="row">Name</th>
+                                            <th scope="row">Age</th>
                                             <th scope="row">Role</th>
                                             <th scope="row">Edit</th>
                                             <th scope="row">Delete</th>
@@ -79,7 +81,9 @@
                                         <tbody>
                                         <tr th:each="user : ${usersSet}">
                                             <td th:text="${user.id}" class="align-middle">ID</td>
-                                            <td th:text="${user.username}" class="align-middle">USERNAME</td>
+                                            <td th:text="${user.username}" class="align-middle">Username</td>
+                                            <td th:text="${user.name}" class="align-middle">Name</td>
+                                            <td th:text="${user.age}" class="align-middle">Age</td>
                                             <td class="align-middle">
                                                 <div th:each="roleName : ${user.rolesSet}">
                                                     <span th:text="${#strings.substring(roleName.getRoleName(), 5)}"></span>
@@ -120,6 +124,22 @@
                                                                                    class="form-control" name="username">
                                                                         </div>
                                                                         <div class="mb-3">
+                                                                            <label for="editName"
+                                                                                   class="form-label fw-bold">Username</label>
+                                                                            <input th:value="*{name}" type="text"
+                                                                                   id="editName"
+                                                                                   class="form-control" name="username">
+                                                                        </div>
+
+                                                                        <div class="mb-3">
+                                                                            <label for="editAge"
+                                                                                   class="form-label fw-bold">Age</label>
+                                                                            <input th:value="*{age}" type="number"
+                                                                                   id="editAge" class="form-control"
+                                                                                   name="age">
+                                                                        </div>
+
+                                                                        <div class="mb-3">
                                                                             <label for="editPassword"
                                                                                    class="form-label fw-bold">Password</label>
                                                                             <input type="password" id="editPassword"
@@ -130,7 +150,8 @@
                                                                                    class="form-label fw-bold">Roles</label>
                                                                             <select id="editRoles" multiple="multiple"
                                                                                     class="form-select form-select-sm"
-                                                                                    th:field="*{rolesSet}" name="rolesSet"
+                                                                                    th:field="*{rolesSet}"
+                                                                                    name="rolesSet"
                                                                                     size="3">
                                                                                 <option th:each="roleName : ${rolesList}"
                                                                                         th:value="${roleName.id}"
@@ -190,11 +211,28 @@
                                                                                    disabled>
                                                                         </div>
                                                                         <div class="mb-3">
+                                                                            <label for="deleteName"
+                                                                                   class="form-label fw-bold">Username</label>
+                                                                            <input th:value="*{name}" type="text"
+                                                                                   id="deleteName"
+                                                                                   class="form-control" name="username"
+                                                                                   disabled>
+                                                                        </div>
+
+                                                                        <div class="mb-3">
+                                                                            <label for="deleteAge"
+                                                                                   class="form-label fw-bold">Age</label>
+                                                                            <input th:value="*{age}" type="number"
+                                                                                   id="deleteAge" class="form-control"
+                                                                                   name="age" disabled>
+                                                                        </div>
+                                                                        <div class="mb-3">
                                                                             <label for="deleteRoles"
                                                                                    class="form-label fw-bold">Roles</label>
                                                                             <select id="deleteRoles" multiple="multiple"
                                                                                     class="form-select form-select-sm"
-                                                                                    th:field="*{rolesSet}" name="rolesSet"
+                                                                                    th:field="*{rolesSet}"
+                                                                                    name="rolesSet"
                                                                                     disabled size="3">
                                                                                 <option th:each="roleName : ${user.rolesSet}"
                                                                                         th:value="${roleName.id}"
@@ -232,6 +270,14 @@
                                         <form th:method="POST" th:action="@{/admin/new}" th:object="${user}"
                                               class="text-center">
 
+                                            <label for="name" class="form-label fw-bold mt-3">Name</label>
+                                            <input th:field="*{name}" type="text" id="name" class="form-control"
+                                                   placeholder="Name">
+
+                                            <label for="age" class="form-label fw-bold mt-3">Age</label>
+                                            <input th:field="*{age}" type="number" id="age" class="form-control"
+                                                   placeholder="Age">
+
                                             <label for="username" class="form-label fw-bold mt-3">Username</label>
                                             <input th:field="*{username}" type="text" id="username" class="form-control"
                                                    placeholder="Username">
@@ -266,6 +312,8 @@
                                 <tr>
                                     <th scope="row">ID</th>
                                     <th scope="row">Username</th>
+                                    <th scope="row">Name</th>
+                                    <th scope="row">Age</th>
                                     <th scope="row">Role</th>
                                 </tr>
                                 </thead>
@@ -273,6 +321,8 @@
                                 <tr>
                                     <td th:text="${admin.id}" class="align-middle">ID</td>
                                     <td th:text="${admin.username}" class="align-middle">Username</td>
+                                    <td th:text="${admin.name}" class="align-middle">Name</td>
+                                    <td th:text="${admin.age}" class="align-middle">Age</td>
                                     <td class="align-middle">
                                         <div th:each="roleName : ${admin.rolesSet}">
                                             <span th:text="${#strings.substring(roleName.getRoleName(), 5)}"></span>

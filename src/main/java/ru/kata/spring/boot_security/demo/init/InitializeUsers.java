@@ -25,8 +25,8 @@ public class InitializeUsers {
     private final Set<Role> roles2 = new HashSet<>(Set.of(userRole));
 
 
-    private final User admin = new User("admin", "admin", roles1);
-    private final User user = new User("user", "user", roles2);
+    private final User admin = new User("admin", "admin_name", 36, "admin", roles1);
+    private final User user = new User("user", "user_name", 24, "user", roles2);
 
     @Autowired
     public InitializeUsers(UserService userService, RoleService roleService) {

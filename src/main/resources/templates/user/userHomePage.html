@@ -54,13 +54,17 @@
                                 <tr>
                                     <th scope="row">ID</th>
                                     <th scope="row">Username</th>
+                                    <th scope="row">Name</th>
+                                    <th scope="row">Age</th>
                                     <th scope="row">Role</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
                                     <td th:text="${user.id}" class="align-middle">ID</td>
-                                    <td th:text="${user.username}" class="align-middle">Email</td>
+                                    <td th:text="${user.username}" class="align-middle">Username</td>
+                                    <td th:text="${user.name}" class="align-middle">Name</td>
+                                    <td th:text="${user.age}" class="align-middle">Age</td>
                                     <td class="align-middle">
                                         <div th:each="roleName : ${user.rolesSet}">
                                             <span th:text="${#strings.substring(roleName.getRoleName(), 5)}"></span>
