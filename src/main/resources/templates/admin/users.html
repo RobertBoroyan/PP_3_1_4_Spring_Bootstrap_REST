@@ -121,14 +121,14 @@
                                                                                    class="form-label fw-bold">Username</label>
                                                                             <input th:value="*{username}" type="text"
                                                                                    id="editUsername"
-                                                                                   class="form-control" name="username">
+                                                                                   class="form-control" name="username" required>
                                                                         </div>
                                                                         <div class="mb-3">
                                                                             <label for="editName"
                                                                                    class="form-label fw-bold">Username</label>
                                                                             <input th:value="*{name}" type="text"
                                                                                    id="editName"
-                                                                                   class="form-control" name="username">
+                                                                                   class="form-control" name="name" required>
                                                                         </div>
 
                                                                         <div class="mb-3">
@@ -136,14 +136,14 @@
                                                                                    class="form-label fw-bold">Age</label>
                                                                             <input th:value="*{age}" type="number"
                                                                                    id="editAge" class="form-control"
-                                                                                   name="age">
+                                                                                   name="age" required>
                                                                         </div>
 
                                                                         <div class="mb-3">
                                                                             <label for="editPassword"
                                                                                    class="form-label fw-bold">Password</label>
                                                                             <input type="password" id="editPassword"
-                                                                                   class="form-control" name="password">
+                                                                                   class="form-control" name="password" required>
                                                                         </div>
                                                                         <div class="mb-3">
                                                                             <label for="editRoles"
@@ -273,19 +273,19 @@
 
                                             <label for="name" class="form-label fw-bold mt-3">Name</label>
                                             <input th:field="*{name}" type="text" id="name" class="form-control"
-                                                   placeholder="Name">
+                                                   placeholder="Name" required>
 
                                             <label for="age" class="form-label fw-bold mt-3">Age</label>
                                             <input th:field="*{age}" type="number" id="age" class="form-control"
-                                                   placeholder="Age">
+                                                   placeholder="Age" required>
 
                                             <label for="username" class="form-label fw-bold mt-3">Username</label>
                                             <input th:field="*{username}" type="text" id="username" class="form-control"
-                                                   placeholder="Username">
+                                                   placeholder="Username" required>
 
                                             <label for="password" class="form-label fw-bold mt-3">Password</label>
                                             <input th:field="*{password}" type="password" id="password"
-                                                   class="form-control" placeholder="Password">
+                                                   class="form-control" placeholder="Password" required>
 
                                             <label for="rolesSet" class="form-label fw-bold mt-3">Role</label>
                                             <select id="rolesSet" multiple="multiple" th:field="*{rolesSet}"
