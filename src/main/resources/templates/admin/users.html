@@ -152,7 +152,8 @@
                                                                                     class="form-select form-select-sm"
                                                                                     th:field="*{rolesSet}"
                                                                                     name="rolesSet"
-                                                                                    size="3">
+                                                                                    size="2"
+                                                                                    required="required">
                                                                                 <option th:each="roleName : ${rolesList}"
                                                                                         th:value="${roleName.id}"
                                                                                         th:text="${#strings.substring(roleName.roleName, 5)}"></option>
@@ -288,7 +289,7 @@
 
                                             <label for="rolesSet" class="form-label fw-bold mt-3">Role</label>
                                             <select id="rolesSet" multiple="multiple" th:field="*{rolesSet}"
-                                                    class="form-select form-select-sm" size="3">
+                                                    class="form-select form-select-sm" size="2" required="required">
                                                 <option th:each="roleName : ${rolesList}" th:value="${roleName.id}"
                                                         th:text="${#strings.substring(roleName.roleName, 5)}"></option>
                                             </select>
