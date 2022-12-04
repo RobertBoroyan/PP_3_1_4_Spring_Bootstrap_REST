@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.init;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -9,24 +11,14 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 @Component
-public class InitializeUsers {
+public class InitializeUsers implements ApplicationRunner {
     private final UserService userService;
     private final RoleService roleService;
-
-
-    Role adminRole = new Role("ROLE_ADMIN");
-    Role userRole = new Role("ROLE_USER");
-
-    private final Set<Role> roles1 = new HashSet<>(Set.of(adminRole, userRole));
-    private final Set<Role> roles2 = new HashSet<>(Set.of(userRole));
-
-
-    private final User admin = new User("admin", "admin_name", 36, "admin", roles1);
-    private final User user = new User("user", "user_name", 24, "user", roles2);
 
     @Autowired
     public InitializeUsers(UserService userService, RoleService roleService) {
@@ -34,38 +26,26 @@ public class InitializeUsers {
         this.roleService = roleService;
     }
 
+    @Override
     @Transactional
-    public void init() {
+    public void run(ApplicationArguments args) throws Exception {
+
+        Role adminRole = new Role("ROLE_ADMIN");
+        Role userRole = new Role("ROLE_USER");
+
+
+        final Set<Role> roles1 = new HashSet<>(List.of(adminRole, userRole));
+        final Set<Role> roles2 = new HashSet<>(List.of(userRole));
+
+        final User admin = new User("admin", "admin", 26, "admin", roles1);
+        final User user = new User("user", "user", 12, "user", roles2);
+
+
         roleService.save(adminRole);
         roleService.save(userRole);
+
         userService.addUser(admin);
         userService.addUser(user);
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        InitializeUsers that = (InitializeUsers) o;
-        return Objects.equals(userService, that.userService) && Objects.equals(roleService, that.roleService) && Objects.equals(adminRole, that.adminRole) && Objects.equals(userRole, that.userRole) && Objects.equals(roles1, that.roles1) && Objects.equals(roles2, that.roles2) && Objects.equals(admin, that.admin) && Objects.equals(user, that.user);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userService, roleService, adminRole, userRole, roles1, roles2, admin, user);
-    }
-
-    @Override
-    public String toString() {
-        return "InitializeUsers{" +
-                "userService=" + userService +
-                ", roleService=" + roleService +
-                ", adminRole=" + adminRole +
-                ", userRole=" + userRole +
-                ", roles1=" + roles1 +
-                ", roles2=" + roles2 +
-                ", admin=" + admin +
-                ", user=" + user +
-                '}';
     }
 }

@@ -1,11 +1,13 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.hibernate.Hibernate;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
@@ -22,12 +24,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -79,6 +83,18 @@ public class UserServiceImpl implements UserService {
             return user;
         } else
             throw new UsernameNotFoundException("No user with such username");
+    }
+
+    @Override
+    @Transactional
+    public UserDTO convertToDto(User user) {
+        return modelMapper.map(user, UserDTO.class);
+    }
+
+    @Override
+    @Transactional
+    public User convertToUser(UserDTO userDTO) {
+        return modelMapper.map(userDTO, User.class);
     }
 
 }

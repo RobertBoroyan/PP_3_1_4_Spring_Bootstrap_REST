@@ -1,17 +1,23 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.util.UserErrorResponse;
+import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
-@Controller
-@RequestMapping("/admin")
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/admin/api")
 public class AdminsController {
 
     private final UserService userService;
@@ -24,28 +30,34 @@ public class AdminsController {
     }
 
     @GetMapping
-    public String getAllUsers(@ModelAttribute("user") User user, Model model, Authentication authentication) {
-        model.addAttribute("usersSet", userService.findAll());
-        model.addAttribute("principal", authentication);
-        model.addAttribute("rolesList", roleService.findAll());
-        model.addAttribute("admin", userService.findByUsername(authentication.getName()));
-        return "admin/users";
+    public List<UserDTO> getAllUsers() {
+        return userService.findAll().stream().map(userService::convertToDto).collect(Collectors.toList());
     }
 
     @PatchMapping("/edit/{id}")
-    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") int id) {
-        userService.changeUser(id, user);
-        return "redirect:/admin";
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody UserDTO user, @PathVariable("id") int id) {
+        userService.changeUser(id, userService.convertToUser(user));
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/edit/{id}")
-    public String deleteUser(@PathVariable("id") int id) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
-        return "redirect:/admin";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
+
     @PostMapping("/new")
-    public String addNewUser (@ModelAttribute("user") User user) {
+    public ResponseEntity<?> addNewUser(@RequestBody UserDTO userDTO) {
+        User user = userService.convertToUser(userDTO);
+
         userService.addUser(user);
-        return "redirect:/admin";
+        return ResponseEntity.ok(HttpStatus.CREATED);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<UserErrorResponse> handleException(UserNotFoundException e) {
+        UserErrorResponse userErrorResponse = new UserErrorResponse("User with this id wasn't found!");
+        return new ResponseEntity<>(userErrorResponse, HttpStatus.NOT_FOUND);
+
     }
 }

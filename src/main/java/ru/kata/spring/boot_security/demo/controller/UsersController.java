@@ -6,11 +6,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-@Controller
-@RequestMapping("/user")
+@RestController
+@RequestMapping("/user/api")
 public class UsersController {
     private final UserService userService;
 
@@ -20,9 +22,7 @@ public class UsersController {
     }
 
     @GetMapping
-    public String getUserPage(Authentication auth, Model model) {
-        User user = (User) auth.getPrincipal();
-        model.addAttribute("user", userService.findByUsername(user.getUsername()));
-        return "user/userHomePage";
+    public UserDTO getUser(Authentication auth) {
+        return userService.convertToDto(userService.findByUsername(auth.getName()));
     }
 }
