@@ -2,27 +2,27 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kata.spring.boot_security.demo.dto.UserDTO;
-import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.Converter;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @RestController
 @RequestMapping("/user/api")
-public class UsersController {
+public class UsersControllerREST {
     private final UserService userService;
+    private final Converter converter;
 
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersControllerREST(UserService userService, Converter converter) {
         this.userService = userService;
+        this.converter = converter;
     }
 
     @GetMapping
     public UserDTO getUser(Authentication auth) {
-        return userService.convertToDto(userService.findByUsername(auth.getName()));
+        return converter.convertToDto(userService.findByUsername(auth.getName()));
     }
 }

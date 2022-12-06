@@ -25,14 +25,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper modelMapper;
+
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
-        this.modelMapper = modelMapper;
+
     }
 
     @Override
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     public void changeUser(int id, User replaceUser) {
         replaceUser.setId(id);
         Optional<User> previousUser = userRepository.findById(id);
-        if (replaceUser.getRolesSet().isEmpty()){
+        if (replaceUser.getRolesSet().isEmpty()) {
             previousUser.ifPresent(user -> replaceUser.setRolesSet(user.getRolesSet()));
         }
         if (replaceUser.getPassword().isEmpty()) {
@@ -103,6 +103,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsername(String username) {
         Optional<User> optionalUser = userRepository.findUserByUsername(username);
+
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             Hibernate.initialize(user.getRolesSet());
@@ -111,16 +112,5 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("No user with such username");
     }
 
-    @Override
-
-    public UserDTO convertToDto(User user) {
-        return modelMapper.map(user, UserDTO.class);
-    }
-
-    @Override
-
-    public User convertToUser(UserDTO userDTO) {
-        return modelMapper.map(userDTO, User.class);
-    }
 
 }

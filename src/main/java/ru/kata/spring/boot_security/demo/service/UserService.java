@@ -19,7 +19,5 @@ public interface UserService {
 
     User findByUsername(String username);
 
-    UserDTO convertToDto(User user);
 
-    User convertToUser(UserDTO userDTO);
 }

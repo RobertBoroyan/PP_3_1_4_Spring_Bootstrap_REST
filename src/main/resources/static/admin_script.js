@@ -1,6 +1,6 @@
 
 async function auth() {
-    let res = await fetch('http://localhost:8080/admin/api/auth');
+    let res = await fetch('http://localhost:8080/api/auth');
     return await res.json();
 }
 
@@ -48,7 +48,7 @@ function onDeleteButton(button) {
 
 //Модальное окно Edit
 async function EditModal() {
-    let roles = await fetch("http://localhost:8080/admin/api/roles");
+    let roles = await fetch("http://localhost:8080/api/roles");
     roles = await roles.json();
     roles.forEach(role => {
         if (document.querySelector('#editRoles').children.length < 2) {
@@ -98,7 +98,7 @@ function DeleteModal() {
 async function newUser() {
 
 
-    let roles = await fetch('http://localhost:8080/admin/api/roles');
+    let roles = await fetch('http://localhost:8080/api/roles');
     roles = await roles.json();
     roles.forEach(role => {
         if (document.querySelector('#roles').children.length < 3) {

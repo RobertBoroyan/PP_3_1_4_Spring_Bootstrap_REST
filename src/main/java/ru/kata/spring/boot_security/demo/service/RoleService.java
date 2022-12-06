@@ -14,7 +14,5 @@ public interface RoleService {
 
     Role findRoleByRole(String role);
 
-
-    RoleDTO convertToDto(Role role);
-     Role findRoleById(int id) throws RoleNotFoundException;
+    Role findRoleById(int id) throws RoleNotFoundException;
 }

@@ -5,7 +5,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dto.RoleDTO;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 
@@ -17,12 +16,11 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
-    private final ModelMapper modelMapper;
+
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository, ModelMapper modelMapper) {
+    public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
-        this.modelMapper = modelMapper;
 
     }
 
@@ -42,11 +40,6 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findRoleByRoleName(role);
     }
 
-    @Override
-    @Transactional
-    public RoleDTO convertToDto(Role role) {
-        return modelMapper.map(role, RoleDTO.class);
-    }
 
     @Override
     public Role findRoleById(int id) throws RoleNotFoundException {
