@@ -3,19 +3,16 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.dto.RoleDTO;
 import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.Converter;
+import ru.kata.spring.boot_security.demo.service.ConverterService;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.util.UserErrorResponse;
 import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,10 +21,10 @@ public class AdminsControllerREST {
 
     private final UserService userService;
     private final RoleService roleService;
-    private final Converter converter;
+    private final ConverterService converter;
 
     @Autowired
-    public AdminsControllerREST(UserService userService, RoleService roleService, Converter converter) {
+    public AdminsControllerREST(UserService userService, RoleService roleService, ConverterService converter) {
         this.userService = userService;
         this.roleService = roleService;
         this.converter = converter;

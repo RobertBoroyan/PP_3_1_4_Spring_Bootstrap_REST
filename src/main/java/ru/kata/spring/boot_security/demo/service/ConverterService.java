@@ -5,7 +5,7 @@ import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
-public interface Converter {
+public interface ConverterService {
     RoleDTO convertToDto(Role role);
 
     UserDTO convertToDto(User user);
