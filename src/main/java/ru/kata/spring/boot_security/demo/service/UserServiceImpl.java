@@ -112,13 +112,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+
     public UserDTO convertToDto(User user) {
         return modelMapper.map(user, UserDTO.class);
     }
 
     @Override
-    @Transactional
+
     public User convertToUser(UserDTO userDTO) {
         return modelMapper.map(userDTO, User.class);
     }

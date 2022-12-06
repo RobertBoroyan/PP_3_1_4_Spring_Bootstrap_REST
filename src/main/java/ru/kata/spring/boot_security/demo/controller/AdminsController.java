@@ -38,18 +38,22 @@ public class AdminsController {
 
     @PatchMapping("/edit/{id}")
     public ResponseEntity<HttpStatus> updateUser(@RequestBody UserDTO userDTO, @PathVariable("id") int id) {
+        System.out.println("updating");
         userService.changeUser(id, userService.convertToUser(userDTO));
+
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/edit/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") int id) {
+        System.out.println("delete");
         userService.deleteUser(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/new")
     public ResponseEntity<?> addNewUser(@RequestBody UserDTO userDTO) {
+        System.out.println("creating");
         User user = userService.convertToUser(userDTO);
 
         userService.addUser(user);
