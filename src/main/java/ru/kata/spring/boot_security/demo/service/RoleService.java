@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.service;
 import ru.kata.spring.boot_security.demo.dto.RoleDTO;
 import ru.kata.spring.boot_security.demo.model.Role;
 
+import javax.management.relation.RoleNotFoundException;
 import java.util.List;
 
 public interface RoleService {
@@ -13,5 +14,7 @@ public interface RoleService {
 
     Role findRoleByRole(String role);
 
+
     RoleDTO convertToDto(Role role);
+     Role findRoleById(int id) throws RoleNotFoundException;
 }

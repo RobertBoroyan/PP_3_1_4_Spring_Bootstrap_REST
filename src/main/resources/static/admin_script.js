@@ -1,5 +1,6 @@
+
 async function auth() {
-    let res = await fetch('http://localhost:8080/admin/api');
+    let res = await fetch('http://localhost:8080/admin/api/auth');
     return await res.json();
 }
 
@@ -35,7 +36,7 @@ function onDeleteButton(button) {
         document.querySelector('#deleteUsername').value = tr.children[3].innerHTML;
 
 
-        let roles = Array.from(tr.children[6].children).map(role => role.innerHTML);
+        let roles = Array.from(tr.children[4].children).map(role => role.innerHTML);
         roles.forEach(role => {
             let option = document.createElement('option');
             option.text = role;
@@ -50,10 +51,10 @@ async function EditModal() {
     let roles = await fetch("http://localhost:8080/admin/api/roles");
     roles = await roles.json();
     roles.forEach(role => {
-        if (document.querySelector('#editRoles').children.length < 3) {
+        if (document.querySelector('#editRoles').children.length < 2) {
             let option = document.createElement("option");
             option.value = role.id;
-            option.text = role.role.substring(5, role.role.length);
+            option.text = role.roleName.substring(5, role.roleName.length);
             document.querySelector('#editRoles').appendChild(option);
         }
     });
@@ -72,7 +73,7 @@ async function EditModal() {
                 age: document.querySelector('#editAge').value,
                 username: document.querySelector('#editUsername').value,
                 password: document.querySelector('#editPassword').value,
-                roles: listOfRoles(document.querySelector('#editRoles'))
+                rolesSet: listOfRoles(document.querySelector('#editRoles'))
             })
         });
         await refreshPage();
@@ -95,9 +96,7 @@ function DeleteModal() {
 
 //Таб нового юзера
 async function newUser() {
-    if (!document.querySelector('#warning').classList.contains('d-none')) {
-        document.querySelector('#warning').classList.add('d-none');
-    }
+
 
     let roles = await fetch('http://localhost:8080/admin/api/roles');
     roles = await roles.json();
@@ -105,7 +104,7 @@ async function newUser() {
         if (document.querySelector('#roles').children.length < 3) {
             let option = document.createElement("option");
             option.value = role.id;
-            option.text = role.role.substring(5, role.role.length);
+            option.text = role.roleName.substring(5, role.roleName.length);
             document.querySelector('#roles').appendChild(option);
         }
     });
@@ -113,7 +112,7 @@ async function newUser() {
     document.querySelector('#newUserForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const url = 'http://localhost:8080/admin/api/new';
-        let response = await fetch(url, {
+        let response = await fetch(url,{
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -123,7 +122,7 @@ async function newUser() {
                 age: document.querySelector('#age').value,
                 username: document.querySelector('#username').value,
                 password: document.querySelector('#password').value,
-                roles: listOfRoles(document.querySelector('#roles'))
+                rolesSet: listOfRoles(document.querySelector('#roles'))
             })
         });
         if (response.status === 406) {
@@ -144,8 +143,8 @@ async function upperPanel() {
     let user = await auth();
     document.getElementById("adminUsername").textContent = user.username;
     let roles = "";
-    user.roles.forEach(role => {
-        roles += role.role.substring(5, role.role.length) + " ";
+    user.rolesSet.forEach(role => {
+        roles += role.roleName.substring(5, role.roleName.length) + " ";
     })
     document.getElementById("adminRoles").textContent = roles;
 }
@@ -155,7 +154,7 @@ function listOfRoles(options) {
     let res = [];
     for (let i = 0; i < options.length; i++) {
         if (options[i].selected) {
-            res.push({id: options[i].value, role: options[i].text});
+            res.push({id: options[i].value, roleName: options[i].text});
         }
     }
     return res;
@@ -168,11 +167,9 @@ async function refreshPage() {
     document.querySelector('#allUsersTBody').innerHTML = '';
     users.forEach(user => {
         let table = "";
-        let roles = user.roles.map(role => role.role.substring(5, role.role.length));
+        let roles = user.rolesSet.map(role => role.roleName.substring(5, role.roleName.length));
         let rolesInTable = '';
-        roles.forEach(role => {
-            rolesInTable += `<div>${role}</div>`
-        });
+        roles.forEach(role => {rolesInTable += `<div>${role}</div>`});
         table += `<tr id="tr${user.id}">
             <td class="align-middle">${user.id}</td>
             <td class="align-middle">${user.name}</td>
@@ -199,11 +196,9 @@ async function refreshUserPanel() {
     const tbody = document.querySelector('#userTBody');
 
     let user = await auth();
-    let roles = user.roles.map(role => role.role.substring(5, role.role.length));
+    let roles = user.rolesSet.map(role => role.roleName.substring(5, role.roleName.length));
     let rolesInTable = '';
-    roles.forEach(role => {
-        rolesInTable += `<div>${role}</div>`
-    });
+    roles.forEach(role => {rolesInTable += `<div>${role}</div>`});
 
     tbody.innerHTML = `<tr>
             <td class="align-middle">${user.id}</td>

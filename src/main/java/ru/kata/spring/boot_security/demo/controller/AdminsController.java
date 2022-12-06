@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.dto.RoleDTO;
 import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
@@ -14,6 +15,7 @@ import ru.kata.spring.boot_security.demo.util.UserErrorResponse;
 import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,8 +37,8 @@ public class AdminsController {
     }
 
     @PatchMapping("/edit/{id}")
-    public ResponseEntity<HttpStatus> updateUser(@RequestBody UserDTO user, @PathVariable("id") int id) {
-        userService.changeUser(id, userService.convertToUser(user));
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody UserDTO userDTO, @PathVariable("id") int id) {
+        userService.changeUser(id, userService.convertToUser(userDTO));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -52,6 +54,16 @@ public class AdminsController {
 
         userService.addUser(user);
         return ResponseEntity.ok(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/auth")
+    public UserDTO getAuth(Authentication auth) {
+        return userService.convertToDto(userService.findByUsername(auth.getName()));
+    }
+
+    @GetMapping("/roles")
+    public Set<RoleDTO> getAllRoles() {
+        return roleService.findAll().stream().map(roleService::convertToDto).collect(Collectors.toSet());
     }
 
     @ExceptionHandler

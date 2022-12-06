@@ -12,6 +12,7 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
+import javax.management.relation.RoleNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -55,7 +56,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Set<Role> userRoles = user.getRolesSet().stream().map(role -> roleService.findRoleByRole(role.getRoleName()))
+        Set<Role> userRoles = user.getRolesSet()
+                .stream().map(role -> {
+                    try {
+                        return roleService.findRoleById(role.getId());
+                    } catch (RoleNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .collect(Collectors.toSet());
         user.setRolesSet(userRoles);
         userRepository.save(user);
@@ -65,7 +73,25 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void changeUser(int id, User replaceUser) {
         replaceUser.setId(id);
-        addUser(replaceUser);
+        Optional<User> previousUser = userRepository.findById(id);
+        if (replaceUser.getRolesSet().isEmpty()){
+            previousUser.ifPresent(user -> replaceUser.setRolesSet(user.getRolesSet()));
+        }
+        if (replaceUser.getPassword().isEmpty()) {
+            Set<Role> roles = replaceUser.getRolesSet().stream().map(role -> {
+                        try {
+                            return roleService.findRoleById(role.getId());
+                        } catch (RoleNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .collect(Collectors.toSet());
+            replaceUser.setRolesSet(roles);
+            previousUser.ifPresent(user -> replaceUser.setPassword(user.getPassword()));
+            userRepository.save(replaceUser);
+        } else {
+            addUser(replaceUser);
+        }
     }
 
     @Override
